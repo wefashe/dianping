@@ -26,7 +26,6 @@
         <java.version>1.8</java.version>
     </properties>
 
-
     <dependencies>
 
         <!--Spring Boot Web-->
@@ -40,18 +39,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            <!--junit-vintage-engine提供了Junit3与Junit4的运行平台-->
-            <!--这个是JUnit5中为了支持使用JUint4所做的一个过度
-               也就是说，你只需要在你的JUnit4旧项目中添加这个依赖，
-               就能完美过渡，而不用修改之前代码
-               这里用不到，自然也就排除了。当然，这里，它无关紧要
-             -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+
+        <!--Redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!--Redis连接池，配置中存在连接池配置，要加上此依赖-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
 
         <!--MySQL 连接组件-->
@@ -79,14 +78,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <!--springboot热部署, 修改代码不用重启项目-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
@@ -94,19 +93,15 @@
     <build>
         <plugins>
             <plugin>
+                <!--Maven插件，构建过程中打包Spring Boot应用程序-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <!-- 打包时排除devtools相关包 -->
+                    <excludeDevtools>true</excludeDevtools>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 
 </project>
