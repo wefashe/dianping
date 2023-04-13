@@ -19,6 +19,8 @@ spring:
         max-idle: 10 # 连接池中的最大空闲连接 默认 8
         min-idle: 1 # 连接池中的最小空闲连接 默认 0
         time-between-eviction-runs: 10s
+  jackson:
+    default-property-inclusion: non_null # JSON处理时忽略非空字段
 mybatis-plus:
   type-aliases-package: com.hmdp.entity # 别名扫描包
 logging:
