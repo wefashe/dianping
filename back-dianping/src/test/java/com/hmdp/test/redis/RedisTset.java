@@ -1,4 +1,4 @@
-package com.hmdp.redis;
+package com.hmdp.test.redis;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ public class RedisTset {
     private StringRedisTemplate stringRedisTemplate;
 
     /**
-     * 字符串测试
+     * 字符串（String）
      */
     @Test
     public void stringTest() throws Exception {
@@ -52,8 +52,7 @@ public class RedisTset {
     }
 
     /**
-     * 列表测试
-     * @throws Exception
+     * 列表（List）
      */
     @Test
     public void listTest() throws Exception {
@@ -80,5 +79,30 @@ public class RedisTset {
         System.out.println(operations.range("user:list:user3",3,-1));
 
     }
+
+    /**
+     * 哈希（Hash）
+     */
+    @Test
+    public void hashTest() throws Exception {
+
+    }
+
+    /**
+     * 集合（Set）
+     */
+    @Test
+    public void setTest() throws Exception {
+
+    }
+
+    /**
+     * 有序集合（Sorted Set）
+     */
+    @Test
+    public void sortedSetTest() throws Exception {
+
+    }
+
 
 }
