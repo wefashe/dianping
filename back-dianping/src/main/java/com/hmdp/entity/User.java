@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 用户表
+ * 用户登陆信息实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

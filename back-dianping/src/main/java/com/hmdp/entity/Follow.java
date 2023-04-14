@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 关注表
+ * 用户关注实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

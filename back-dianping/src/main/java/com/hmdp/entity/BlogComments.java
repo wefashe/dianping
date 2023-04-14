@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 评论表
+ * 笔记评论实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

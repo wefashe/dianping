@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 用户信息表
+ * 用户详细信息实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

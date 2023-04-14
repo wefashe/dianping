@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 商铺优惠券表
+ * 商铺优惠券实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

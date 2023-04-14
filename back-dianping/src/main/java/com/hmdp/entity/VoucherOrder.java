@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 优惠券订单表
+ * 优惠券订单实体类
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

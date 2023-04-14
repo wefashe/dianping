@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 秒杀优惠券表，与优惠券是一对一关系
+ * 秒杀特惠劵实体类，与优惠券是一对一关系
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -33,11 +33,6 @@ public class SeckillVoucher implements Serializable {
     private Integer stock;
 
     /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
      * 生效时间
      */
     private LocalDateTime beginTime;
@@ -51,5 +46,10 @@ public class SeckillVoucher implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
 }
