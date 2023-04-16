@@ -13,10 +13,12 @@ public class Result {
 
     private Boolean success;
     private String errorMsg;
+    // 可以使用泛型
     private Object data;
     private Long total;
 
     public static Result ok(){
+        // 可以增加枚举类
         return new Result(true, null, null, null);
     }
     public static Result ok(Object data){
