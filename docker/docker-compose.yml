@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  # mysql
+  mysql:
+    container_name: dianping_mysql
+    image: mysql:5.7
+    environment:
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hmdp
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/mysql.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/data/:/var/lib/mysql/
+      - ./mysql/log/:/var/log/mysql/
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci'
+    ]
+    restart: always
+
+  # redis
+  redis:
+    container_name: dianping_redis
+    image: "library/redis:alpine"
+    environment:
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data/:/data/
+      - ./redis/log/:/var/log/redis/
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+  # 后端服务
+  back:
+    container_name: back-dianping
+    build:
+      context: ../dianping-front
+      dockerfile: ../dianping-front/Dockerfile
+    environment:
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+      - mysql
+    restart: always
+
+  # 前端服务
+  front:
+    container_name: dianping-front
+    build:
+      context: ../dianping-front
+      dockerfile: ../dianping-front/Dockerfile
+    environment:
+      TZ: Asia/Shanghai
+      LANG: en_US.UTF-8
+    ports:
+      - "8080:8080"
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/conf.d/
+#      - ./nginx/html/:/usr/share/nginx/html/
+#      - ./nginx/log/:/var/log/nginx/
+    restart: always

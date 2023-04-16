@@ -1,1 +1,4 @@
 .idea
+docker/mysql
+docker/redis
+docker/nginx
