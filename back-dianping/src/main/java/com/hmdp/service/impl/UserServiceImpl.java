@@ -47,19 +47,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 2. 生成验证码
         String code = RandomUtil.randomNumbers(6);
+        String codeKey = RedisConstants.LOGIN_CODE_KEY + phone;
+
+        // 3. 防止用户过于频繁发送
+        Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(codeKey);
+        if (RedisConstants.LOGIN_CODE_TTL - expire < 60) {
+            return Result.fail("操作过于频繁，请一分钟之后再次点击发送");
+        }
+
+        // 4. 调用短信发送逻辑
+        boolean isSuccess = true;
+        if (!isSuccess){
+            return Result.fail("短信发送失败");
+        }
 
         // 思考一下 登录信息存入session和redis的优缺点
 
-        // 3. 将验证码保存到 redis 中
-        String codeKey = RedisConstants.LOGIN_CODE_KEY + phone;
-        stringRedisTemplate.opsForValue().set(codeKey, code, RedisConstants.LOGIN_CODE_TTL, TimeUnit.MINUTES);
-
-        // TODO 4. 发送验证码到手机
+        // 5. 短信发送成功，才将验证码保存到 redis 中
+        stringRedisTemplate.opsForValue().set(codeKey, code, RedisConstants.LOGIN_CODE_TTL, TimeUnit.SECONDS);
         log.debug("send code {} to phone {}", code, phone);
 
-        // 5. 返回发送成功
+        // 6. 返回发送成功
         return Result.ok();
-
     }
 
     @Override
@@ -99,6 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
 
         // 3. 验证通过，返回token
+        log.debug("{} login successfully", phone);
         return getToken(user);
     }
 
@@ -108,7 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String cacheCode = stringRedisTemplate.opsForValue().get(codeKey);
         if (StrUtil.isBlank(cacheCode)) {
             // 验证码不存在
-            return Result.fail("服务异常，请重新获取验证码");
+            return Result.fail("验证码不存在或已过期，请重新获取验证码");
         }
 
         // 2. 验证验证码
@@ -123,7 +133,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // 4. 用户不存在，创建用户
             user = createDefaultUserWithPhone(phone);
         }
-        // 5. 验证通过，返回token
+
+        // 4. 登陆成功后，移除验证码
+        if(stringRedisTemplate.hasKey(codeKey)){
+            stringRedisTemplate.delete(codeKey);
+        }
+
+        // 6. 验证通过，返回token
+        log.debug("{} login successfully", phone);
         return getToken(user);
     }
 
