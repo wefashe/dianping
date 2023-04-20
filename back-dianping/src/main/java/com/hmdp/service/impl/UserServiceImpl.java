@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -135,7 +136,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
 
         // 4. 登陆成功后，移除验证码
-        if(stringRedisTemplate.hasKey(codeKey)){
+        if (stringRedisTemplate.hasKey(codeKey)) {
             stringRedisTemplate.delete(codeKey);
         }
 
@@ -180,5 +181,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 7 返回token
         return Result.ok(token);
+    }
+
+    @Override
+    public Result logout(HttpServletRequest request) {
+        // 1. 获取token
+        String token = request.getHeader("authorization");
+        // 2. 拼接token在redis的key
+        String tokenKey =RedisConstants.LOGIN_USER_KEY + token;
+        // 3. 判断token在redis是否存在
+        if (stringRedisTemplate.hasKey(tokenKey)) {
+            // 存在，则进行删除
+            stringRedisTemplate.delete(tokenKey);
+        }
+        // 4. 删除本地线程的用户信息
+        UserHolder.remove();
+        // 5. 返回成功
+        return Result.ok();
     }
 }
